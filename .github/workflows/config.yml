@@ -1,0 +1,37 @@
+name: Mirror-AOSP-CLANG
+
+on: # [push]
+#  release:
+#    types: [published]
+#  push:
+#    branches:
+#      - master
+#    paths:
+#      - '.config'
+#  schedule:
+#    - cron: 0 8 * * 5
+# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  watch:
+    types: [started]
+
+env:
+  GH_USERNAME: "Egii"
+  GH_EMAIL: "regidesoftian@gmail.com"
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  CLANG_VERSION: ${{ secrets.CLANG_VERSION }}
+  GH_PUSH_REPO_URL: github.com/Himemoria/aosp-clang
+  TZ: Asia/Jakarta
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: himemori/docker:latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@master
+
+        - name: Import & Push
+          run: |
+           chmod +x aosp-mirror.sh && bash aosp-mirror.sh
